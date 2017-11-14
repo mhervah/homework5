@@ -499,6 +499,38 @@ canvas.addEventListener("click",function(e){
 		}	
 	}
 });
+const starts = Math.round(Math.random());
+let Xmove;
+if(starts)
+	Xmove=true;
+else
+	Xmove=false;
+const loop = function(){
+
+	if(!Xmove&&end){
+		if(findWinner(board)!=undefined)
+			{
+				console.log(findWinner(board));
+				gameEnd(findWinner(board));
+				return;
+			}
+		let nextO=nextMove(board,false);
+		makeMove(board,nextO,false);
+		end=false;
+		drawO(nextO);
+
+		Xmove=true;
+		
+	}
+	if(findWinner(board)!=undefined&&end)
+			{
+				console.log(findWinner(board));
+				gameEnd(findWinner(board));
+				return;
+			}
+	requestAnimationFrame(loop);
+}
+loop();
 //Extra change make move function to this
 const nextMove = function(board,isX){
 	for(let i=0;i<3;i++)
