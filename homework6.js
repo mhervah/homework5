@@ -225,7 +225,7 @@ const loop = function(){
 	if(findWinner(board)!=undefined)
 		{	
 			if(findWinner(board).winner==='none')
-				alert(Tie!!!);
+				alert("Tie!!!");
 			else
 				alert(findWinner(board).winner+" won!!!");
 			return;
@@ -237,7 +237,7 @@ const loop = function(){
 	if(findWinner(board)!=undefined)
 		{	
 			if(findWinner(board).winner==='none')
-				alert(Tie!!!);
+				alert("Tie!!!");
 			else
 				alert(findWinner(board).winner+" won!!!");
 			return;
