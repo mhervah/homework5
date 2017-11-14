@@ -223,7 +223,11 @@ const loop = function(){
 	makeMove(board,nextX,true);		
 	
 	if(findWinner(board)!=undefined)
-		{
+		{	
+			if(findWinner(board).winner==='none')
+				alert(Tie!!!);
+			else
+				alert(findWinner(board).winner+" won!!!");
 			return;
 		}
 		
@@ -231,7 +235,11 @@ const loop = function(){
 	makeMove(board,nextO,false);
 
 	if(findWinner(board)!=undefined)
-		{
+		{	
+			if(findWinner(board).winner==='none')
+				alert(Tie!!!);
+			else
+				alert(findWinner(board).winner+" won!!!");
 			return;
 		}
 
