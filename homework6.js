@@ -246,7 +246,7 @@ const loop = function(){
 	loop();
 }
 loop();
-//7 use my html file
+//7 use my html file, download sounds
 const canvas = document.getElementById("mycanvas");
 const ctx = canvas.getContext("2d");
 
