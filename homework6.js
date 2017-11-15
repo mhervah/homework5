@@ -50,32 +50,6 @@ const printDiamond = function(char,num){
 }
 //3
 const nextMove = function(board,isX){
-	for(let i=0;i<3;i++)
- 		for(let j=0;j<3;j++){
- 			if(board[i][j]===" "){
- 				board[i][j]="o";
- 				if(findWinner(board)!==undefined&&findWinner(board).winner==="o")
- 				{
- 					board[i][j]=" ";
- 					return[i,j];
- 				}
- 				else
- 					board[i][j]=" ";
- 			}
- 		}
-	for(let i=0;i<3;i++)
- 		for(let j=0;j<3;j++){
- 			if(board[i][j]===" "){
- 				board[i][j]="x";
- 				if(findWinner(board)!==undefined&&findWinner(board).winner==="x")
- 				{
- 					board[i][j]=" ";
- 					return[i,j];
- 				}
- 				else
- 					board[i][j]=" ";
- 			}
- 		}
  	const rand = function(num) {
 		return Math.round(Math.random() * num);
 	};
@@ -573,3 +547,43 @@ replaybtn.addEventListener("click",function(){
 	animBoard(lw);
 	loop();
 });
+//Extra use my html change make move function
+const nextMove = function(board,isX){
+	for(let i=0;i<3;i++)
+ 		for(let j=0;j<3;j++){
+ 			if(board[i][j]===" "){
+ 				board[i][j]="o";
+ 				if(findWinner(board)!==undefined&&findWinner(board).winner==="o")
+ 				{
+ 					board[i][j]=" ";
+ 					return[i,j];
+ 				}
+ 				else
+ 					board[i][j]=" ";
+ 			}
+ 		}
+	for(let i=0;i<3;i++)
+ 		for(let j=0;j<3;j++){
+ 			if(board[i][j]===" "){
+ 				board[i][j]="x";
+ 				if(findWinner(board)!==undefined&&findWinner(board).winner==="x")
+ 				{
+ 					board[i][j]=" ";
+ 					return[i,j];
+ 				}
+ 				else
+ 					board[i][j]=" ";
+ 			}
+ 		}
+ 	const rand = function(num) {
+		return Math.round(Math.random() * num);
+	};
+ 	let n1 = rand(2);
+	let n2 = rand(2);
+	while(board[n1][n2]!==' ')
+	{
+		n1 = rand(2);
+		n2 = rand(2);
+	} 
+	return [n1,n2];
+}
