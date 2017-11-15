@@ -50,7 +50,33 @@ const printDiamond = function(char,num){
 }
 //3
 const nextMove = function(board,isX){
-	const rand = function(num) {
+	for(let i=0;i<3;i++)
+ 		for(let j=0;j<3;j++){
+ 			if(board[i][j]===" "){
+ 				board[i][j]="o";
+ 				if(findWinner(board)!==undefined&&findWinner(board).winner==="o")
+ 				{
+ 					board[i][j]=" ";
+ 					return[i,j];
+ 				}
+ 				else
+ 					board[i][j]=" ";
+ 			}
+ 		}
+	for(let i=0;i<3;i++)
+ 		for(let j=0;j<3;j++){
+ 			if(board[i][j]===" "){
+ 				board[i][j]="x";
+ 				if(findWinner(board)!==undefined&&findWinner(board).winner==="x")
+ 				{
+ 					board[i][j]=" ";
+ 					return[i,j];
+ 				}
+ 				else
+ 					board[i][j]=" ";
+ 			}
+ 		}
+ 	const rand = function(num) {
 		return Math.round(Math.random() * num);
 	};
  	let n1 = rand(2);
@@ -61,7 +87,7 @@ const nextMove = function(board,isX){
 		n2 = rand(2);
 	} 
 	return [n1,n2];
- }
+}
 //4
 const makeMove = function(board,location,isX){
 	if(board[location[0]][location[1]]===" "){
@@ -263,10 +289,11 @@ const board = [
 ];
 
 let lw=15;
+
 canvas.width = 450 + 2*lw;
 canvas.height = 450 + 2*lw;
 
-const animBoard = function(){
+const animBoard = function(lw){
 	let x1=0;
 	let x2=0;
 	let y1=0;
@@ -350,13 +377,14 @@ const animBoard = function(){
 	animate();
 }
 
-const gameEnd = function(obj){
+const gameEnd = function(obj,lw){
 	let x1 = obj.winningLocations[0][1]*(150+lw);
 	let y1 = obj.winningLocations[0][0]*(150+lw);
 	let x2 = obj.winningLocations[1][1]*(150+lw);
 	let y2 = obj.winningLocations[1][0]*(150+lw);
 	let x3 = obj.winningLocations[2][1]*(150+lw);
 	let y3 = obj.winningLocations[2][0]*(150+lw);
+	console.log(obj.winningLocations);
 	let a=0;
 		
 	const animate = function(){
@@ -399,7 +427,7 @@ const gameEnd = function(obj){
 		if(a<0.5){
 			a+=0.01;
 		}
-		if(a<0)
+		if(a>=0.5)
 		 	return;
 		
 		requestAnimationFrame(animate);
@@ -409,7 +437,7 @@ const gameEnd = function(obj){
 }
 
 let end = true;
-const drawO = function(locations){
+const drawO = function(locations,lw){
  	let x = (locations[1]*(150+lw))+150/2;
  	let y = (locations[0]*(150+lw))+150/2;
  	const radius = 45;
@@ -439,7 +467,7 @@ const drawO = function(locations){
  	animate();
 }
 
-const drawX = function(locations){
+const drawX = function(locations,lw){
 	let y1=locations[0]*(150+lw) + 30;
 	let x1=locations[1]*(150+lw) + 30;
 	let i=0;
@@ -483,7 +511,8 @@ const drawX = function(locations){
 	XSound.play();
 	animate();
 }
-animBoard();
+
+animBoard(lw);
 canvas.addEventListener("click",function(e){
 	if(Xmove&&end&&!findWinner(board)){
 		if(!((e.offsetX>150&&e.offsetX<150+lw)||(e.offsetX>300+lw&&e.offsetX<300+2*lw)||(e.offsetY>150&&e.offsetY<150+lw)||(e.offsetY>300+lw&&e.offsetY<30+2*lw)))
@@ -491,7 +520,7 @@ canvas.addEventListener("click",function(e){
 			if(board[Math.floor(e.offsetY/(150+lw))][Math.floor(e.offsetX/(150+lw))]===" "){
 				if(end){
 					end=false;
-					drawX([Math.floor(e.offsetY/(150+lw)),Math.floor(e.offsetX/(150+lw))]);
+					drawX([Math.floor(e.offsetY/(150+lw)),Math.floor(e.offsetX/(150+lw))],lw);
 				}
 				makeMove(board,[Math.floor(e.offsetY/(150+lw)),Math.floor(e.offsetX/(150+lw))],true);
 				Xmove=false;
@@ -499,87 +528,48 @@ canvas.addEventListener("click",function(e){
 		}	
 	}
 });
+
 const starts = Math.round(Math.random());
 let Xmove;
 if(starts)
 	Xmove=true;
 else
 	Xmove=false;
+
 const loop = function(){
-
-	if(!Xmove&&end){
-		if(findWinner(board)!=undefined)
-			{
-				console.log(findWinner(board));
-				gameEnd(findWinner(board));
-				return;
-			}
-		let nextO=nextMove(board,false);
-		makeMove(board,nextO,false);
-		end=false;
-		drawO(nextO);
-
-		Xmove=true;
-		
+	if(findWinner(board)!==undefined&&end){
+		if(findWinner(board).winner!=='none'){
+			gameEnd(findWinner(board),lw);
+			return;
+		}
+		else{
+			drawSound.play();
+			return;
+		}	
 	}
-	if(findWinner(board)!=undefined&&end)
-			{
-				console.log(findWinner(board));
-				gameEnd(findWinner(board));
-				return;
-			}
+	if(!Xmove&&end&&findWinner(board)===undefined){
+			let nextO=nextMove(board,false);
+			makeMove(board,nextO,false);
+			end=false;
+			drawO(nextO,lw);
+			Xmove=true;
+		}
+		
+
+
 	requestAnimationFrame(loop);
 }
 loop();
-//Extra change make move function to this
-const nextMove = function(board,isX){
-	for(let i=0;i<3;i++)
- 		for(let j=0;j<3;j++){
- 			if(board[i][j]===" "){
- 				board[i][j]="o";
- 				if(findWinner(board)!==undefined&&findWinner(board).winner==="o")
- 				{
- 					board[i][j]=" ";
- 					return[i,j];
- 				}
- 				else
- 					board[i][j]=" ";
- 			}
 
- 		}
-	for(let i=0;i<3;i++)
- 		for(let j=0;j<3;j++){
- 			if(board[i][j]===" "){
- 				board[i][j]="x";
- 				if(findWinner(board)!==undefined&&findWinner(board).winner==="x")
- 				{
- 					board[i][j]=" ";
- 					return[i,j];
- 				}
- 					
- 				else
- 					board[i][j]=" ";
- 			}
- 			
+const replaybtn = document.getElementById("replay");
 
- 		}
- 		n=rand(4);
-		if(board[1][1]===" "&&n==0)
-			return [1,1];
-		if(board[0][0]===" "&&n==1)
-			return [0,0];
-		if(board[0][2]===" "&&n==2)
-			return [0,2];
-		if(board[2][2]===" "&&n==3)
-			return [2,2];
-		if(board[2][0]===" "&&n==4)
-			return [2,0];*/
- 	let n1 = rand(2);
-	let n2 = rand(2);
-	while(board[n1][n2]!==' ')
-	{
-		n1 = rand(2);
-		n2 = rand(2);
-	} 
-	return [n1,n2];
-}
+replaybtn.addEventListener("click",function(){
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	board = [
+    [' ', ' ', ' '],
+    [' ', ' ', ' '],
+    [' ', ' ', ' ']
+	];
+	animBoard(lw);
+	loop();
+});
